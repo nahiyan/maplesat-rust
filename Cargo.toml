@@ -5,3 +5,18 @@ edition = "2024"
 
 [dependencies]
 clap = "4.5.31"
+
+[features]
+default = [
+  "bh_lrb",
+  "lbd_based_clause_deletion",
+  "almost_conflict",
+  "anti_exploration",
+]
+# Branching Heuristics
+bh_chb = []
+bh_lrb = []
+bh_vsids = []
+lbd_based_clause_deletion = []
+almost_conflict = []
+anti_exploration = []
