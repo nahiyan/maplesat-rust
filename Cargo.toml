@@ -1,10 +1,11 @@
 [package]
-name = "maplesat-rust"
+name = "maplesat_rust"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
 clap = "4.5.31"
+typed-arena = "2.0.2"
 
 [features]
 default = [
