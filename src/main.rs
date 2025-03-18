@@ -1,5 +1,4 @@
 mod models;
-mod solver;
 
 fn main() {
     // Ensure that only one branching heuristic is enabled
