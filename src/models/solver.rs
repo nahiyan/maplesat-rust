@@ -193,12 +193,7 @@ impl<'a> Solver<'a> {
     }
 
     fn satisfied(&self, c: &Clause) -> bool {
-        for lit in c {
-            if self.lit_value(lit) == LBool::True {
-                return true;
-            }
-        }
-        false
+        c.iter().any(|lit| self.lit_value(lit) == LBool::True)
     }
 
     // TODO: Finish
