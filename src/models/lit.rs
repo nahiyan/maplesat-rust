@@ -1,4 +1,4 @@
-use super::var::Var;
+use super::{lbool::LBool, var::Var};
 use std::ops::Not;
 
 pub struct Lit {
@@ -9,7 +9,7 @@ pub struct Lit {
 impl Lit {
     pub fn new(var: Var, sign: bool) -> Lit {
         assert!(var >= 0 && var <= 1);
-        let value = (var << 1) | (sign as i32);
+        let value = (var.id << 1) | (sign as i32);
         Lit { value }
     }
 
@@ -18,14 +18,18 @@ impl Lit {
     }
 
     pub fn var(&self) -> Var {
-        self.value >> 1
+        Var::from(self.value >> 1)
     }
 
-    // Implement operator ^
-    pub fn xor(self, b: bool) -> Self {
-        Lit {
-            value: self.value ^ (b as i32),
-        }
+    pub fn value(&self, values: &Vec<LBool>) -> LBool {
+        let value = self.var().value(values);
+        LBool::from((value as i32) ^ (self.sign() as i32))
+    }
+}
+
+impl From<i32> for Lit {
+    fn from(value: i32) -> Self {
+        Lit { value }
     }
 }
 
@@ -66,7 +70,7 @@ mod tests {
 
     #[test]
     fn test_lit_new() {
-        let var = 1;
+        let var = Var::from(1);
         let sign = true;
         let lit = Lit::new(var, sign);
         assert_eq!(lit.value, 3);
@@ -74,20 +78,20 @@ mod tests {
 
     #[test]
     fn test_lit_sign() {
-        let lit = Lit { value: 3 };
+        let lit = Lit::from(3);
         assert!(lit.sign());
 
-        let lit = Lit { value: 2 };
+        let lit = Lit::from(2);
         assert!(!lit.sign());
     }
 
     #[test]
     fn test_lit_var() {
-        let lit = Lit { value: 3 };
-        assert_eq!(lit.var(), 1);
+        let lit = Lit::from(3);
+        assert!(lit.var() == 1);
 
-        let lit = Lit { value: 2 };
-        assert_eq!(lit.var(), 1);
+        let lit = Lit::from(2);
+        assert!(lit.var() == 1);
     }
 
     #[test]
@@ -98,24 +102,24 @@ mod tests {
 
     #[test]
     fn test_lit_partial_eq() {
-        let lit1 = Lit { value: 2 };
-        let lit2 = Lit { value: 3 };
-        let lit3 = Lit { value: 3 };
+        let lit1 = Lit::from(2);
+        let lit2 = Lit::from(3);
+        let lit3 = Lit::from(3);
         assert!(lit1 != lit2);
         assert!(lit2 == lit3);
     }
 
     #[test]
     fn test_lit_partial_ord() {
-        let lit1 = Lit { value: 2 };
-        let lit2 = Lit { value: 3 };
+        let lit1 = Lit::from(2);
+        let lit2 = Lit::from(3);
         assert!(lit1 < lit2);
         assert!(lit2 > lit1);
     }
 
     #[test]
     fn test_lit_not() {
-        let lit = Lit::new(1, false);
+        let lit = Lit::new(Var::from(1), false);
         let lit2 = !lit;
         assert_eq!(lit2.value, 3);
     }
