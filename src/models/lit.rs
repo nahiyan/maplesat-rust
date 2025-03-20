@@ -27,6 +27,14 @@ impl Lit {
     }
 }
 
+impl Copy for Lit {}
+
+impl Clone for Lit {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+
 impl From<i32> for Lit {
     fn from(value: i32) -> Self {
         Lit { value }
