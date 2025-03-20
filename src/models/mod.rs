@@ -1,7 +1,7 @@
-mod clause;
-mod lbool;
-mod lit;
-mod solver;
-mod var;
-mod var_data;
-mod watcher;
+pub mod clause;
+pub mod lbool;
+pub mod lit;
+pub mod solver;
+pub mod var;
+pub mod var_data;
+pub mod watcher;
